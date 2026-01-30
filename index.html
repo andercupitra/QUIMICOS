@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestro Viaje Juntos 🌌</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            background: #0a0a1a;
+            color: #fff;
+        }
+
+        /* ==================== ANIMACIÓN DE PROBETAS ==================== */
+        #lab-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(ellipse at center, #1a1a3e 0%, #0a0a1a 100%);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        #lab-animation.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        #lab-animation.fade-out {
+            opacity: 0;
+        }
+
+        .lab-container {
+            display: flex;
+            gap: 60px;
+            align-items: flex-end;
+            position: relative;
+        }
+
+        .test-tube {
+            width: 80px;
+            height: 200px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 3px solid rgba(100, 200, 255, 0.4);
+            border-radius: 0 0 15px 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.1);
+            animation: tube-shake 2s ease-in-out infinite;
+        }
+
+        .test-tube:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .test-tube:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes tube-shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-2deg); }
+            75% { transform: rotate(2deg); }
+        }
+
+        .tube-top {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 35px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+            border: 3px solid rgba(100, 200, 255, 0.4);
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .liquid {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 0;
+            animation: fill-liquid 3s ease-out forwards;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .test-tube:nth-child(1) .liquid {
+            background: linear-gradient(to top, rgba(255, 107, 157, 0.8), rgba(255, 107, 157, 0.4));
+            box-shadow: 0 0 30px rgba(255, 107, 157, 0.6);
+        }
+
+        .test-tube:nth-child(2) .liquid {
+            background: linear-gradient(to top, rgba(100, 200, 255, 0.8), rgba(100, 200, 255, 0.4));
+            box-shadow: 0 0 30px rgba(100, 200, 255, 0.6);
+            animation-delay: 0.3s;
+        }
+
+        .test-tube:nth-child(3) .liquid {
+            background: linear-gradient(to top, rgba(102, 126, 234, 0.8), rgba(102, 126, 234, 0.4));
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+            animation-delay: 0.6s;
+        }
+
+        @keyframes fill-liquid {
+            0% { height: 0; }
+            100% { height: 70%; }
+        }
+
+        .bubbles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            bottom: 0;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: 0;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: rise 3s infinite ease-in;
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: 0;
+                opacity: 0;
+                transform: translateX(0) scale(0.5);
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                bottom: 100%;
+                opacity: 0;
+                transform: translateX(20px) scale(1);
+            }
+        }
+
+        .bubble:nth-child(1) { left: 20%; animation-duration: 2.5s; animation-delay: 0.5s; }
+        .bubble:nth-child(2) { left: 50%; animation-duration: 3s; animation-delay: 1s; }
+        .bubble:nth-child(3) { left: 70%; animation-duration: 2.8s; animation-delay: 1.5s; }
+        .bubble:nth-child(4) { left: 35%; animation-duration: 3.2s; animation-delay: 0.8s; }
+        .bubble:nth-child(5) { left: 65%; animation-duration: 2.7s; animation-delay: 1.2s; }
+
+        .reaction-spark {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .spark {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: spark-fly 1.5s ease-out infinite;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        @keyframes spark-fly {
+            0% {
+                top: 50%;
+                left: 50%;
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                top: 20%;
+                left: 50%;
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0.2);
+            }
+        }
+
+        .test-tube:nth-child(1) .spark:nth-child(1) { --tx: -30px; --ty: -40px; animation-delay: 0.5s; color: #ff6b9d; }
+        .test-tube:nth-child(1) .spark:nth-child(2) { --tx: 30px; --ty: -40px; animation-delay: 0.8s; color: #ff6b9d; }
+        .test-tube:nth-child(2) .spark:nth-child(1) { --tx: -25px; --ty: -35px; animation-delay: 1s; color: #64c8ff; }
+        .test-tube:nth-child(2) .spark:nth-child(2) { --tx: 25px; --ty: -35px; animation-delay: 1.3s; color: #64c8ff; }
+        .test-tube:nth-child(3) .spark:nth-child(1) { --tx: -35px; --ty: -45px; animation-delay: 1.5s; color: #667eea; }
+        .test-tube:nth-child(3) .spark:nth-child(2) { --tx: 35px; --ty: -45px; animation-delay: 1.8s; color: #667eea; }
+
+        .lab-text {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.8rem;
+            color: #64c8ff;
+            text-align: center;
+            opacity: 0;
+            animation: fade-in-text 2s ease 1s forwards;
+            text-shadow: 0 0 20px rgba(100, 200, 255, 0.6);
+        }
+
+        @keyframes fade-in-text {
+            to { opacity: 1; }
+        }
+
+        /* ==================== LANDING PAGE ==================== */
+        #landing {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(ellipse at center, #1a1a3e 0%, #0a0a1a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        #landing.hidden {
+            opacity: 0;
+            transform: scale(1.2);
+            pointer-events: none;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Átomo animado */
+        .atom-container {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin-bottom: 50px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .nucleus {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, #ff6b9d, #c44569);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 30px #ff6b9d, 0 0 60px #ff6b9d;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 2px solid rgba(100, 200, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .orbit:nth-child(2) {
+            width: 100px;
+            height: 100px;
+            animation: rotate 4s linear infinite;
+        }
+
+        .orbit:nth-child(3) {
+            width: 160px;
+            height: 160px;
+            animation: rotate 6s linear infinite reverse;
+        }
+
+        .orbit:nth-child(4) {
+            width: 220px;
+            height: 220px;
+            animation: rotate 8s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .electron {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, #64c8ff, #3498db);
+            border-radius: 50%;
+            box-shadow: 0 0 15px #64c8ff;
+        }
+
+        .orbit:nth-child(2) .electron {
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .orbit:nth-child(3) .electron {
+            top: 50%;
+            right: -6px;
+            transform: translateY(-50%);
+        }
+
+        .orbit:nth-child(4) .electron {
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Botón continuar */
+        .continue-btn {
+            padding: 20px 60px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .continue-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .continue-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.6);
+        }
+
+        .continue-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ==================== PÁGINA PRINCIPAL ==================== */
+        #main-page {
+            opacity: 0;
+            transform: translateY(100px);
+            transition: opacity 1s ease, transform 1s ease;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #main-page.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Fondo animado con partículas */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(100, 200, 255, 0.6);
+            border-radius: 50%;
+            animation: float-particle 15s infinite;
+        }
+
+        @keyframes float-particle {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Contenedor principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header con efecto glass */
+        .header {
+            text-align: center;
+            margin-bottom: 80px;
+            animation: fadeInDown 1s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            font-size: 4rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(102, 126, 234, 0.5);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .header .subtitle {
+            font-size: 1.5rem;
+            color: #64c8ff;
+            font-weight: 300;
+            letter-spacing: 3px;
+        }
+
+        /* Card de mensaje con glassmorphism */
+        .message-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin-bottom: 60px;
+            animation: fadeInUp 1s ease 0.3s backwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-card h2 {
+            font-size: 2.5rem;
+            color: #ff6b9d;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.5);
+        }
+
+        .message-card p {
+            font-size: 1.3rem;
+            line-height: 2;
+            color: #e0e0e0;
+            text-align: justify;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .message-card p strong {
+            color: #64c8ff;
+            font-weight: 600;
+        }
+
+        .highlight {
+            color: #f093fb;
+            font-style: italic;
+            position: relative;
+        }
+
+        /* Reproductor de audio */
+        .audio-player {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin-bottom: 60px;
+            animation: fadeInUp 1s ease 0.6s backwards;
+        }
+
+        .audio-player h3 {
+            text-align: center;
+            color: #64c8ff;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .audio-controls {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 50px;
+            outline: none;
+        }
+
+        audio::-webkit-media-controls-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Sección de elementos químicos */
+        .elements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+            animation: fadeInUp 1s ease 0.9s backwards;
+        }
+
+        .element-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .element-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .element-card:hover::before {
+            opacity: 1;
+            animation: rotate-glow 3s linear infinite;
+        }
+
+        @keyframes rotate-glow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .element-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .element-symbol {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .element-name {
+            font-size: 1.2rem;
+            color: #64c8ff;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .element-meaning {
+            font-size: 0.95rem;
+            color: #ccc;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 80px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease 1.2s backwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .footer p {
+            color: #888;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .footer .heart {
+            color: #ff6b9d;
+            animation: heartbeat 1.5s ease infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .header .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .message-card {
+                padding: 30px 20px;
+            }
+
+            .message-card h2 {
+                font-size: 1.8rem;
+            }
+
+            .message-card p {
+                font-size: 1.1rem;
+            }
+
+            .atom-container {
+                width: 180px;
+                height: 180px;
+            }
+
+            .continue-btn {
+                padding: 15px 40px;
+                font-size: 18px;
+            }
+
+            .elements-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scroll reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- LANDING PAGE -->
+    <div id="landing">
+        <div class="stars" id="stars"></div>
+        
+        <div class="atom-container">
+            <div class="nucleus"></div>
+            <div class="orbit">
+                <div class="electron"></div>
+            </div>
+            <div class="orbit">
+                <div class="electron"></div>
+            </div>
+            <div class="orbit">
+                <div class="electron"></div>
+            </div>
+        </div>
+
+        <button class="continue-btn" onclick="goToMain()">
+            <span>👉 Continuar</span>
+        </button>
+    </div>
+
+    <!-- ANIMACIÓN DE PROBETAS -->
+    <div id="lab-animation">
+        <div class="stars" id="stars-lab"></div>
+        <div class="lab-container">
+            <div class="test-tube">
+                <div class="tube-top"></div>
+                <div class="liquid"></div>
+                <div class="bubbles">
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="reaction-spark">
+                    <div class="spark"></div>
+                    <div class="spark"></div>
+                </div>
+            </div>
+            <div class="test-tube">
+                <div class="tube-top"></div>
+                <div class="liquid"></div>
+                <div class="bubbles">
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="reaction-spark">
+                    <div class="spark"></div>
+                    <div class="spark"></div>
+                </div>
+            </div>
+            <div class="test-tube">
+                <div class="tube-top"></div>
+                <div class="liquid"></div>
+                <div class="bubbles">
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                    <div class="bubble"></div>
+                </div>
+                <div class="reaction-spark">
+                    <div class="spark"></div>
+                    <div class="spark"></div>
+                </div>
+            </div>
+        </div>
+        <div class="lab-text">Preparando algo especial... ✨</div>
+    </div>
+
+    <!-- PÁGINA PRINCIPAL -->
+    <div id="main-page">
+        <div class="particles" id="particles"></div>
+
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <h1>Nuestro Viaje Juntos </h1>
+                <p class="subtitle">Unidos por la ciencia, la amistad y los sueños</p>
+            </div>
+
+            <!-- Mensaje inspirador -->
+            <div class="message-card reveal">
+                <h2>✨ Un Mensaje del Corazón ✨</h2>
+                <p>
+                    Queridos compañeros, <strong>este mensaje es para ustedes</strong>. Estamos a punto de comenzar una nueva aventura juntos, y aunque aún no hemos empezado las clases, ya siento que <span class="highlight">algo extraordinario está por comenzar</span>.
+                </p>
+                <p>
+                    Cada uno de nosotros llega con sueños diferentes, con historias únicas, pero pronto compartiremos algo increíble: <strong>el viaje del aprendizaje</strong>. La ciencia que vamos a explorar juntos será <strong>la llave que abrirá las puertas del cosmos</strong>. Cada concepto que descubriremos, cada teoría que aprenderemos, cada problema que resolveremos... todo eso nos acercará más a entender el milagro de la existencia.
+                </p>
+                <p>
+                    Sé que el camino que viene puede parecer desafiante. Habrá noches de estudio, exámenes difíciles, conceptos que parecerán imposibles al principio... pero <span class="highlight">estoy seguro de que lo lograremos</span>. Porque juntos, amigos míos, seremos imparables. <strong>No nos rendiremos</strong>. Porque sabemos que cada obstáculo que superemos será una victoria, cada concepto que dominemos será un paso más hacia nuestros sueños.
+                </p>
+                <p>
+                    Más allá del conocimiento que vamos a adquirir, lo que más espero es <strong>construir una amistad verdadera</strong>. Las risas que compartiremos entre clases, el apoyo mutuo cuando alguien no entienda un tema, los momentos de celebración cuando todos aprobemos... Esos recuerdos serán oro puro. <span class="highlight">Seremos más que compañeros, seremos una familia</span> 💙.
+                </p>
+                <p>
+                    Mirando hacia el futuro, veo <strong>un universo de posibilidades</strong> esperándonos. Algunos serán científicos que cambiarán el mundo, otros ingenieros que construirán el mañana, otros médicos que salvarán vidas. Pero todos, absolutamente todos, comenzaremos este camino juntos, apoyándonos mutuamente.
+                </p>
+                <p>
+                    Quiero que sepan desde ahora que <strong>creo en cada uno de ustedes</strong>. Tienen el talento, la dedicación y el corazón necesarios para alcanzar las estrellas. Estamos a punto de descubrir que todo en el universo está conectado, y nosotros seremos prueba de ello. Estaremos conectados por el esfuerzo, por los sueños, por la esperanza de un futuro brillante.
+                </p>
+                <p>
+                    Así que preparémonos para esta aventura, <span class="highlight">juntos desde el primer día</span>. Que nada ni nadie apague ese fuego que arde en nuestros corazones. Somos soñadores, somos el futuro, y estamos listos para comenzar. El universo entero está esperando a ver lo que haremos.
+                </p>
+                <p style="text-align: center; font-size: 1.5rem; margin-top: 30px;">
+                    <strong>Con emoción por lo que viene,</strong><br>
+                    <span class="highlight">Tu futuro compañero 🧪⚛️</span>
+                </p>
+            </div>
+
+            <!-- Audio oculto para reproducción automática -->
+            <audio id="background-music" style="display: none;">
+                <source src="Morat - Aprender A Quererte - MoratVEVO.mp3" type="audio/mpeg">
+            </audio>
+
+            <!-- Footer -->
+            <div class="footer reveal">
+                <p>
+                    🌟 Recuerden: somos como los átomos, pequeños pero poderosos,<br>
+                    y juntos formamos algo mucho más grande 🌟
+                </p>
+                <p style="margin-top: 20px;">
+                    Hecho con <span class="heart">❤️</span> 
+                </p>
+                <p style="margin-top: 10px; font-size: 0.9rem;">
+                    "En el laboratorio de la vida, somos los experimentos que eligieron tener éxito"
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generar estrellas en landing page
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const numberOfStars = 200;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Transición a página principal
+        function goToMain() {
+            const landing = document.getElementById('landing');
+            const labAnimation = document.getElementById('lab-animation');
+            const mainPage = document.getElementById('main-page');
+            const audio = document.getElementById('background-music');
+            
+            // Ocultar landing page
+            landing.classList.add('hidden');
+            
+            setTimeout(() => {
+                landing.style.display = 'none';
+                
+                // Mostrar animación de laboratorio
+                labAnimation.classList.add('active');
+                createStarsLab();
+                
+                // Reproducir música automáticamente
+                if (audio) {
+                    audio.play().catch(error => {
+                        console.log('La reproducción automática fue bloqueada:', error);
+                    });
+                }
+                
+                // Después de 4 segundos, mostrar página principal
+                setTimeout(() => {
+                    labAnimation.classList.add('fade-out');
+                    
+                    setTimeout(() => {
+                        labAnimation.style.display = 'none';
+                        mainPage.classList.add('visible');
+                        createParticles();
+                    }, 1000);
+                }, 4000);
+            }, 1000);
+        }
+
+        // Generar estrellas en la animación de laboratorio
+        function createStarsLab() {
+            const starsContainer = document.getElementById('stars-lab');
+            const numberOfStars = 100;
+
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 2 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Generar partículas flotantes
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const numberOfParticles = 50;
+
+            for (let i = 0; i < numberOfParticles; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Animación de scroll reveal
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+
+        // Event listeners
+        window.addEventListener('scroll', reveal);
+        window.addEventListener('load', () => {
+            createStars();
+            reveal();
+        });
+
+        // Easter egg: click en elementos químicos
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementCards = document.querySelectorAll('.element-card');
+            
+            elementCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'translateY(-10px) rotate(360deg)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 600);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
